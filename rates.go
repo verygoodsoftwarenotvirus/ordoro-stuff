@@ -80,9 +80,9 @@ type Package struct {
 	AmountToCollect float64          `xml:",omitempty"`
 	SpecialServices []SpecialService `xml:",omitempty"`
 	// This causes issues and doesn't omit itself when it's empty :(
-	// Content         Content          `xml:",omitempty"`
-	GroundOnly bool   `xml:",omitempty"`
-	SortBy     string `xml:",omitempty"`
+	Content    *Content `xml:",omitempty"`
+	GroundOnly bool     `xml:",omitempty"`
+	SortBy     string   `xml:",omitempty"`
 	// Machinable is required when Service=('FIRST CLASS', 'STANDARD POST', 'ALL', or 'ONLINE') and (FirstClassMailType='LETTER' or FirstClassMailType='FLAT')
 	Machinable bool `xml:",omitempty"`
 	// Include Dropoff Locations in Response if available
