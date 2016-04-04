@@ -1,0 +1,34 @@
+<RateV4Request USERID="048NA0008090">
+    <Revision>2</Revision>
+    <Package ID="1ST">
+        <Service>FIRST CLASS</Service>
+        <FirstClassMailType>LETTER</FirstClassMailType>
+        <ZipOrigination>44106</ZipOrigination>
+        <ZipDestination>20770</ZipDestination>
+        <Pounds>0</Pounds>
+        <Ounces>3.5</Ounces>
+        <Container/>
+        <Size>REGULAR</Size>
+        <Machinable>true</Machinable>
+    </Package>
+</RateV4Request>
+
+
+
+
+
+
+<RateV4Request USERID="048NA0008090">
+    <Revision>2</Revision>
+    <Package ID="1ST">
+        <Service>First Class</Service>
+        <FirstClassMailType>Letter</FirstClassMailType>
+        <ZipOrigination>44106</ZipOrigination>
+        <ZipDestination>20770</ZipDestination>
+        <Pounds>0</Pounds>
+        <Ounces>3.5</Ounces>
+        <Container></Container>
+        <Size>Regular</Size>
+        <Machinable>true</Machinable>
+    </Package>
+</RateV4Request>
