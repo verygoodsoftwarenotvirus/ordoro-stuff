@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"encoding/xml"
 	"log"
 	"os"
@@ -55,7 +56,7 @@ type Package struct {
 	//
 	Service string
 	// Possible FirstClassMailTypes are Letter, Flat, Parcel, Postcard, Package Service
-	FirstClassMailType string `xml:",omitempty"`
+	FirstClassMailType string `xml:",omitempty" json:",omitempty"`
 	// Zip Code limitations: length=5, pattern=\d{5}.
 	// I've chosen int32 because
 	//      A) int16 was too small to store all possible zip codes.
@@ -67,36 +68,34 @@ type Package struct {
 	// Parcel dimensions
 	Pounds    int64
 	Ounces    float64
-	Container string
-	Size      string  `xml:",omitempty"`
-	Width     float64 `xml:",omitempty"`
-	Length    float64 `xml:",omitempty"`
-	Height    float64 `xml:",omitempty"`
-	Girth     float64 `xml:",omitempty"`
+	Container string  `json:",omitempty"`
+	Size      string  `xml:",omitempty" json:",omitempty"`
+	Width     float64 `xml:",omitempty" json:",omitempty"`
+	Length    float64 `xml:",omitempty" json:",omitempty"`
+	Height    float64 `xml:",omitempty" json:",omitempty"`
+	Girth     float64 `xml:",omitempty" json:",omitempty"`
 	// Value and AmountToCollect are used to determine availability and cost of extra services
 	// Package value
-	Value float64 `xml:",omitempty"`
+	Value float64 `xml:",omitempty" json:",omitempty"`
 	// Collect on delivery amount
-	AmountToCollect float64          `xml:",omitempty"`
-	SpecialServices []SpecialService `xml:",omitempty"`
-	// This causes issues and doesn't omit itself when it's empty :(
-	Content    *Content `xml:",omitempty"`
-	GroundOnly bool     `xml:",omitempty"`
-	SortBy     string   `xml:",omitempty"`
+	AmountToCollect float64          `xml:",omitempty" json:",omitempty"`
+	SpecialServices []SpecialService `xml:",omitempty" json:",omitempty"`
+	Content         *Content         `xml:",omitempty" json:",omitempty"`
+	GroundOnly      bool             `xml:",omitempty" json:",omitempty"`
+	SortBy          string           `xml:",omitempty" json:",omitempty"`
 	// Machinable is required when Service=('FIRST CLASS', 'STANDARD POST', 'ALL', or 'ONLINE') and (FirstClassMailType='LETTER' or FirstClassMailType='FLAT')
-	Machinable bool `xml:",omitempty"`
+	Machinable bool `xml:",omitempty" json:",omitempty"`
 	// Include Dropoff Locations in Response if available
-	ReturnLocations bool `xml:",omitempty"`
+	ReturnLocations bool `xml:",omitempty" json:",omitempty"`
 	// Include mail service specific information in Response if available
-	ReturnServiceInfo bool `xml:",omitempty"`
+	ReturnServiceInfo bool `xml:",omitempty" json:",omitempty"`
 	// when storing DropOffTime and ShipDate as time.Time fields, omitempty doesn't work properly
-	// so we are regrettably formatting them as strings
-	DropOffTime string `xml:",omitempty"`
-	// pattern=\d{2}-[a-zA-z]{3}-\d{4}
-	ShipDate string `xml:",omitempty"`
+	// so we are regrettably formatting them as strings :(
+	DropOffTime string `xml:",omitempty" json:",omitempty"`
+	ShipDate    string `xml:",omitempty" json:",omitempty"` // pattern=\d{2}-[a-zA-z]{3}-\d{4}
 	// The value of this attribute specifies how the RateV4Response will structure the Priority Express Mail Commitment data elements.
 	// default=PEMSH, other option is HFP
-	ShipDateOption string `xml:",omitempty"`
+	ShipDateOption string `xml:",omitempty" json:",omitempty"`
 }
 
 type SpecialService struct {
@@ -104,8 +103,8 @@ type SpecialService struct {
 }
 
 type Content struct {
-	ContentType        string `xml:",omitempty"`
-	ContentDescription string `xml:",omitempty"`
+	ContentType        string `xml:",omitempty" json:",omitempty"`
+	ContentDescription string `xml:",omitempty" json:",omitempty"`
 }
 
 func (p *Package) setSpecialServices(s []int16) {
@@ -189,7 +188,17 @@ func main() {
 		},
 	}
 
-	output, err := xml.MarshalIndent(request, "", "    ")
+	outputType := "xml"
+
+	var output []byte
+	var err error
+
+	if outputType == "xml" {
+		output, err = xml.MarshalIndent(request, "", "  ")
+	} else if outputType == "json" {
+		output, err = json.MarshalIndent(request, "", "  ")
+	}
+
 	if err != nil {
 		log.Fatal(err)
 	}
