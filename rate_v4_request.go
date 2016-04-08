@@ -35,11 +35,13 @@ func (r *RateV4Request) validateRequest() error {
 
 func (r *RateV4Request) requestRate() (RateV4Response, error) {
 	var response RateV4Response
-	marshalledXML, err := xml.Marshal(r)
+	marshalledXML, err := xml.MarshalIndent(r, "", "    ")
 	if err != nil {
 		log.Printf("Error encountered marshalling the request struct:\n\t%v", err)
 		return response, err
 	}
+	log.Printf("marshalledXML:\n%v", string(marshalledXML))
+
 	requestXML := url.QueryEscape(string(marshalledXML))
 	requestURI := fmt.Sprintf("http://production.shippingapis.com/ShippingAPI.dll?API=RateV4&XML=%v", requestXML)
 
@@ -55,6 +57,8 @@ func (r *RateV4Request) requestRate() (RateV4Response, error) {
 		log.Printf("Error reading response from server:\n\t%v", err)
 		return response, err
 	}
+
+	log.Printf("\n\nUSPS response:\n%v", string(contents))
 
 	err = xml.Unmarshal(contents, &response)
 	if err != nil {

@@ -10,9 +10,9 @@ type Package struct {
 	ID                 string `xml:",attr"`
 	Service            string
 	FirstClassMailType string `xml:",omitempty" json:",omitempty"`
-	ZipOrigination     int32
-	ZipDestination     int32
-	Pounds             int64
+	ZipOrigination     string
+	ZipDestination     string
+	Pounds             int
 	Ounces             float64
 	Container          string           `json:",omitempty"`
 	Size               string           `xml:",omitempty" json:",omitempty"`
@@ -94,16 +94,6 @@ func (p Package) validateMachinable() error {
 		if &p.Machinable != nil {
 			return fmt.Errorf("Machinable set despite having invalid Service and FirstClassMailType values")
 		}
-	}
-	return nil
-}
-
-func (p Package) validateZipCodes() error {
-	if p.ZipOrigination < 0 || p.ZipOrigination > 99999 {
-		return fmt.Errorf("ZipOrigination is invalid")
-	}
-	if p.ZipDestination < 0 || p.ZipDestination > 99999 {
-		return fmt.Errorf("ZipDestination is invalid")
 	}
 	return nil
 }

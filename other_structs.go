@@ -8,8 +8,8 @@ type PackageError struct {
 	Number      int    `xml:",omitempty" json:",omitempty"`
 	Source      string `xml:",omitempty" json:",omitempty"`
 	Description string `xml:",omitempty" json:",omitempty"`
-	HelpFile    string // reserved for future use, according to the API docs
-	HelpContext string // reserved for future use, according to the API docs
+	HelpFile    string `xml:",omitempty" json:",omitempty"` // reserved for future use, according to the API docs
+	HelpContext string `xml:",omitempty" json:",omitempty"` // reserved for future use, according to the API docs
 }
 
 type Restriction struct {
@@ -36,9 +36,9 @@ type Content struct {
 }
 
 type Postage struct {
-	CLASSID         string           `xml:",attr"`
-	MailService     string           `xml:",omitempty" json:",omitempty"`
-	Rate            float32          `xml:",omitempty" json:",omitempty"`
+	CLASSID         string           `xml:",attr" json:"-"`
+	MailService     string           `xml:",omitempty" json:"Type,omitempty"`
+	Rate            float32          `xml:",omitempty" json:"Price,omitempty"`
 	SpecialServices []SpecialService `xml:",omitempty" json:",omitempty"`
 	CommitmentDate  string           `xml:",omitempty" json:",omitempty"`
 	CommitmentName  string           `xml:",omitempty" json:",omitempty"`
